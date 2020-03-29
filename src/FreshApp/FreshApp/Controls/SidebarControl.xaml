@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             xmlns:utils="clr-namespace:FreshApp.Utils"
+             x:Class="FreshApp.Controls.SidebarControl">
+   <AbsoluteLayout>
+       <yummy:PancakeView AbsoluteLayout.LayoutBounds="0, 0, 80, 1"
+                           AbsoluteLayout.LayoutFlags="HeightProportional"
+                           BackgroundColor="#5a9f61">
+            <Grid Padding="0, 50">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto " />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Button Text="{x:Static utils:MaterialDesignIcons.ViewGridOutline}"
+                        TextColor="White"
+                        FontSize="Title"
+                        VerticalOptions="StartAndExpand"
+                        FontFamily="{StaticResource MaterialFontFamily}"/>
+                <FlexLayout Grid.Row="1"
+                            Direction="Column"
+                            Wrap="Wrap"
+                            Padding="0, 80">
+                    <Button Text="Meat"
+                            TextColor="#e3f0e5"
+                            Clicked="Button_Clicked"
+                            HeightRequest="130"
+                            WidthRequest="80"
+                            Rotation="-90"/>
+                    <Button Text="Vegetables"
+                            TextColor="#e3f0e5"
+                            HeightRequest="130"
+                            Clicked="Button_Clicked"
+                            Rotation="-90"/>
+                    <Button Text="Fruits"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            HeightRequest="130"
+                            Clicked="Button_Clicked"
+                            Rotation="-90"/>
+                    <Button Text="Milk"
+                            HeightRequest="130"
+                            TextColor="#e3f0e5"
+                            Clicked="Button_Clicked"
+                            Rotation="-90"/>
+                </FlexLayout>
+
+
+                <Button Text="{x:Static utils:MaterialDesignIcons.CartOutline}"
+                        Grid.Row="2"
+                        TextColor="White"
+                        FontSize="Title"
+                        VerticalOptions="EndAndExpand"
+                        FontFamily="{StaticResource MaterialFontFamily}"/>
+            </Grid>
+        </yummy:PancakeView>
+        <yummy:PancakeView AbsoluteLayout.LayoutBounds="40, 470, 60, 60"
+                           HeightRequest="60"
+                           WidthRequest="60"
+                           CornerRadius="5"
+                           x:Name="sectionIndicator"
+                           Sides="3"
+                           VerticalOptions="Center"
+                           BackgroundColor="#5a9f61" >
+                    <yummy:PancakeView WidthRequest="8"
+                                        HeightRequest="8"
+                                        CornerRadius="4"
+                                        Margin="15, 0, 0, 0"
+                                        Grid.Column="1"
+                                        BackgroundColor="White"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Center"/>
+        </yummy:PancakeView>
+   </AbsoluteLayout>
+</ContentView>
