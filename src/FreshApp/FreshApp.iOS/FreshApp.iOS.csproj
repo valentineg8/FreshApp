@@ -141,5 +141,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\materialdesignicons-webfont.ttf" />
+    <BundleResource Include="Resources\indicator.png" />
   </ItemGroup>
 </Project>

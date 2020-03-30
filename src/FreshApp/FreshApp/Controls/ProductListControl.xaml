@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             xmlns:utils="clr-namespace:FreshApp.Utils"
+             xmlns:converters="clr-namespace:FreshApp.Converters"
+             x:Class="FreshApp.Controls.ProductListControl">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:PriceToStringConverter x:Key="centsConverter"
+                                               IsCents="True" />
+            <converters:PriceToStringConverter x:Key="dolarsConverter"
+                                               IsCents="False" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label Text="{Binding Title}"
+               FontSize="Large"
+               FontAttributes="Bold"
+               VerticalOptions="CenterAndExpand"/>
+        <StackLayout Spacing="20"
+                     Grid.Row="1"
+                     BindableLayout.ItemsSource="{Binding Items}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <yummy:PancakeView HeightRequest="90"
+                                        CornerRadius="20, 0, 20, 0"
+                                        Padding="10"
+                                        BackgroundColor="#e9f4eb">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <yummy:PancakeView BackgroundColor="White"
+                                               Grid.RowSpan="2"
+                                               CornerRadius="10">
+                                <Image Source="{Binding Photo}"
+                                       x:Name="image"/>
+                            </yummy:PancakeView>
+                            <Label Text="{Binding Title}"
+                                    Grid.Column="1"
+                                    VerticalOptions="EndAndExpand"
+                                    FontAttributes="Bold"/>
+                            <StackLayout Orientation="Horizontal"
+                                         Grid.Row="1"
+                                         HeightRequest="20"
+                                         VerticalOptions="Start"
+                                         Grid.Column="1"
+                                         Spacing="0">
+                                <Label Text="$"
+                                       TextColor="#fcb44f"
+                                       FontSize="Small"
+                                       VerticalOptions="StartAndExpand"
+                                        />
+                                <Label Text="{Binding Price, Converter={x:StaticResource dolarsConverter}}"
+                                       FontSize="Large"
+                                       FontAttributes="Bold"
+                                       TextColor="#fcb44f"
+                                       VerticalOptions="EndAndExpand"
+                                        />
+                                <Label Text="{Binding Price, Converter={x:StaticResource centsConverter}}"
+                                       TextColor="#fcb44f"
+                                       FontSize="Small"
+                                       VerticalOptions="EndAndExpand"
+                                        />
+                            </StackLayout>
+                            <Button Grid.Column="3"
+                                    Grid.RowSpan="2"
+                                    HeightRequest="50"
+                                    HorizontalOptions="EndAndExpand"
+                                    VerticalOptions="CenterAndExpand"
+                                    CornerRadius="25"
+                                    TextColor="White"
+                                    Clicked="Button_Clicked"
+                                    WidthRequest="50"
+                                    BackgroundColor="#fcb44f"
+                                    FontSize="Title"
+                                    Text="{x:Static utils:MaterialDesignIcons.Plus}"
+                                    FontFamily="{StaticResource MaterialFontFamily}"/>
+                        </Grid>
+                    </yummy:PancakeView>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </StackLayout>
+    </Grid>
+</ContentView>

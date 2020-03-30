@@ -2,9 +2,66 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:FreshApp.Controls"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             xmlns:utils="clr-namespace:FreshApp.Utils"
              x:Class="FreshApp.Views.ProductsPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="carouselProducts">
+                <controls:ProductCarouselControl />
+            </DataTemplate>
+            
+            <DataTemplate x:Key="listProducts">
+                <controls:ProductListControl ProductAdded="ProductListControl_ProductAdded" />
+            </DataTemplate>
+            <utils:ProductsDataTemplateSelector x:Key="productDataTemplateSelector"
+                                                CarouselProduct="{StaticResource carouselProducts}"
+                                                ListProduct="{StaticResource listProducts}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <AbsoluteLayout>
+        <ScrollView AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                    AbsoluteLayout.LayoutFlags="SizeProportional"
+                    Padding="100, 0, 0 ,0">
+            <Grid RowSpacing="0"
+                  Padding="0, 50, 0, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="6*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15" />
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Label Text="Jun 26th"
+                       FontSize="Small"
+                       TextColor="#808080"/>
+                <Label Text="Hello, Tina!"
+                       Grid.Row="1"
+                       FontSize="Large"
+                       FontAttributes="Bold"/>
+                <yummy:PancakeView Grid.RowSpan="2"
+                                   CornerRadius="20"
+                                   Margin="0, 0, 20, 0"
+                                   Grid.Column="1"
+                                   BackgroundColor="#eaf9ed"/>
+                <StackLayout Grid.Row="2"
+                             Margin="0, 40, 0 ,0"
+                             BindableLayout.ItemsSource="{Binding Products}"
+                             BindableLayout.ItemTemplateSelector="{StaticResource productDataTemplateSelector}"
+                             Grid.ColumnSpan="2">
+
+                </StackLayout>
+            </Grid>
+        </ScrollView>
         <controls:SidebarControl AbsoluteLayout.LayoutBounds="0, 0, 140, 1"
+                                 x:Name="sideBar"
                                  AbsoluteLayout.LayoutFlags="HeightProportional"/>
+        <StackLayout  AbsoluteLayout.LayoutBounds="0, 0, 50, 50"
+                      x:Name="mainContainer">
+
+        </StackLayout>
+
     </AbsoluteLayout>
 </ContentPage>
