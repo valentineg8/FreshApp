@@ -4,6 +4,9 @@
              xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
              xmlns:utils="clr-namespace:FreshApp.Utils"
              xmlns:converters="clr-namespace:FreshApp.Converters"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:sharedTransitions="clr-namespace:Plugin.SharedTransitions;assembly=Plugin.SharedTransitions"
+             x:Name="mainContainer"
              x:Class="FreshApp.Controls.ProductListControl">
     <ContentView.Resources>
         <ResourceDictionary>
@@ -30,7 +33,7 @@
                     <yummy:PancakeView HeightRequest="90"
                                         CornerRadius="20, 0, 20, 0"
                                         Padding="10"
-                                        BackgroundColor="#e9f4eb">
+                                        BackgroundColor="{Binding CurrentCategory.SoftColor, Source={x:Reference mainContainer}}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="80" />
@@ -44,8 +47,10 @@
                             <yummy:PancakeView BackgroundColor="White"
                                                Grid.RowSpan="2"
                                                CornerRadius="10">
-                                <Image Source="{Binding Photo}"
-                                       x:Name="image"/>
+                                <ffimageloading:CachedImage Source="{Binding Photo}"
+                                                            Aspect="AspectFill"
+                                                            sharedTransitions:Transition.Name="productPhoto"
+                                                            sharedTransitions:Transition.Group="{Binding Id}"/>
                             </yummy:PancakeView>
                             <Label Text="{Binding Title}"
                                     Grid.Column="1"
@@ -53,23 +58,22 @@
                                     FontAttributes="Bold"/>
                             <StackLayout Orientation="Horizontal"
                                          Grid.Row="1"
-                                         HeightRequest="20"
                                          VerticalOptions="Start"
                                          Grid.Column="1"
                                          Spacing="0">
                                 <Label Text="$"
-                                       TextColor="#fcb44f"
+                                       TextColor="{StaticResource accentColor}"
                                        FontSize="Small"
                                        VerticalOptions="StartAndExpand"
                                         />
                                 <Label Text="{Binding Price, Converter={x:StaticResource dolarsConverter}}"
                                        FontSize="Large"
                                        FontAttributes="Bold"
-                                       TextColor="#fcb44f"
+                                       TextColor="{StaticResource accentColor}"
                                        VerticalOptions="EndAndExpand"
                                         />
                                 <Label Text="{Binding Price, Converter={x:StaticResource centsConverter}}"
-                                       TextColor="#fcb44f"
+                                       TextColor="{StaticResource accentColor}"
                                        FontSize="Small"
                                        VerticalOptions="EndAndExpand"
                                         />
@@ -83,11 +87,15 @@
                                     TextColor="White"
                                     Clicked="Button_Clicked"
                                     WidthRequest="50"
-                                    BackgroundColor="#fcb44f"
+                                    BackgroundColor="{StaticResource accentColor}"
                                     FontSize="Title"
                                     Text="{x:Static utils:MaterialDesignIcons.Plus}"
-                                    FontFamily="{StaticResource MaterialFontFamily}"/>
+                                    FontFamily="MaterialIcons"/>
                         </Grid>
+                        <yummy:PancakeView.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToDetailCommand, Source={x:Reference mainContainer}}"
+                                              CommandParameter="{Binding }"/>
+                        </yummy:PancakeView.GestureRecognizers>
                     </yummy:PancakeView>
                 </DataTemplate>
             </BindableLayout.ItemTemplate>

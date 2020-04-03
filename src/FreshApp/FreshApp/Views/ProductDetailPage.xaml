@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:sharedTransitions="clr-namespace:Plugin.SharedTransitions;assembly=Plugin.SharedTransitions"
+             xmlns:prism="http://prismlibrary.com"
+             xmlns:utils="clr-namespace:FreshApp.Utils"
+             x:Class="FreshApp.Views.ProductDetailPage">
+    <ScrollView>
+           <StackLayout Padding="0, 0, 0, 40">
+                <Grid BackgroundColor="{Binding CurrentCategory.Color}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="400" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ffimageloading:CachedImage Source="plate"
+                                                WidthRequest="300"
+                                                HeightRequest="300"
+                                                x:Name="plateImage"
+                                                Aspect="AspectFit"
+                                                HorizontalOptions="CenterAndExpand"
+                                                VerticalOptions="CenterAndExpand"/>
+                    <StackLayout HorizontalOptions="CenterAndExpand">
+                        <ffimageloading:CachedImage Source="{Binding Product.Photo}"
+                                                    Aspect="AspectFit"
+                                                    HeightRequest="200"
+                                                    WidthRequest="200"
+                                                    sharedTransitions:Transition.Name="productPhoto"
+                                                    VerticalOptions="CenterAndExpand"
+                                                    HorizontalOptions="CenterAndExpand" />
+                    </StackLayout>
+                    <Button Text="{x:Static utils:MaterialDesignIcons.ChevronLeft}"
+                            TextColor="White"
+                            FontSize="Title"
+                            BackgroundColor="Transparent"
+                            FontFamily="MaterialIcons"
+                            VerticalOptions="Start"
+                            HorizontalOptions="Start"
+                            Margin="10, 30"
+                            Command="{prism:GoBack}"/>
+                    <yummy:PancakeView BackgroundColor="White"
+                                       Grid.Row="1"
+                                       CornerRadius="40, 40, 0, 0"
+                                       HeightRequest="400"
+                                       Padding="20, 30"
+                                       Margin="0, -30, 0, 0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50" /> 
+                                <RowDefinition Height="40" /> 
+                                <RowDefinition Height="*" /> 
+                            </Grid.RowDefinitions>
+                            <Label Text="{Binding Product.Title}"
+                                   FontSize="Title"
+                                   VerticalOptions="CenterAndExpand"
+                                   FontAttributes="Bold"/>
+                            <Button HeightRequest="50"
+                                    WidthRequest="50"
+                                    CornerRadius="25"
+                                    BackgroundColor="{StaticResource accentColor}"
+                                    HorizontalOptions="EndAndExpand"
+                                    Text="{x:Static utils:MaterialDesignIcons.Heart}"
+                                    TextColor="White"
+                                    FontSize="Title"
+                                    FontFamily="MaterialIcons"/>
+                            <StackLayout Grid.Row="1"
+                                         Orientation="Horizontal"
+                                         HorizontalOptions="Start">
+                                <yummy:PancakeView HeightRequest="40"
+                                                   CornerRadius="20"
+                                                   Padding="20, 0"
+                                                   BackgroundColor="{Binding CurrentCategory.SoftColor}">
+                                    <Label Text="200g"
+                                           VerticalOptions="Center"
+                                           TextColor="{Binding CurrentCategory.Color}"/>
+                                </yummy:PancakeView>
+                                <yummy:PancakeView HeightRequest="40"
+                                                   CornerRadius="20"
+                                                   Padding="20, 0"
+                                                   BackgroundColor="{StaticResource softAccentColor}">
+                                    <Label Text="Sweet and Sour"
+                                           VerticalOptions="Center"
+                                           TextColor="{StaticResource accentColor}"/>
+                                </yummy:PancakeView>
+                            </StackLayout>
+                            <Label Grid.Row="2"
+                                   Text="{Binding Product.Description}"
+                                   TextColor="#999"/>
+                        </Grid>
+                    </yummy:PancakeView>
+                </Grid>
+            </StackLayout>
+       </ScrollView>
+
+</ContentPage>

@@ -1,68 +1,114 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 using FreshApp.Models;
+using FreshApp.Utils;
+using FreshApp.Views;
+using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Navigation;
 
 namespace FreshApp.ViewModels
 {
-    public class ProductsPageViewModel : BindableBase
+    public class ProductsPageViewModel : ViewModelBase
     {
         public ObservableCollection<ProductSection> Products { get; set; }
-        public ProductsPageViewModel()
+        public Category CurrentCategory { get; set; }
+        public ObservableCollection<Category> Categories { get; set; }
+        public int CartItems { get; set; }
+        public bool IsProductsLoading { get; set; }
+        public string SelectedProductId { get; set; }
+        public DelegateCommand<Product> GoToDetailCommand { get; set; }
+        public DelegateCommand<Category> CurrentCategoryChangedCommand { get; set; }
+        public DelegateCommand AddItemToCartCommand { get; set; }
+        public ProductsPageViewModel(INavigationService navigationPage): base(navigationPage)
         {
+            GoToDetailCommand = new DelegateCommand<Product>(GoToDetail);
+            
+            Products = new ObservableCollection<ProductSection>();
+            AddItemToCartCommand = new DelegateCommand(() => CartItems++);
+            CurrentCategoryChangedCommand = new DelegateCommand<Category>(c => LoadData());
+            Categories = new ObservableCollection<Category>
+            {
+                new Category
+                {
+                    Id = 1,
+                    Title = "Meat",
+                    Icon = "meat.png",
+                    Color = "#9d0b0b",
+                    SoftColor = "#fde8e7",
+
+                },
+                new Category
+                {
+                    Id = 2,
+                    Title = "Vegetables",
+                    Icon = "vegetable.png",
+                    Color = "#5a9f61",
+                    SoftColor = "#e9f4eb"
+                },
+                new Category
+                {
+                    Id = 3,
+                    Title = "Fruits",
+                    Icon = "fruit.png",
+                    Color = "#363062",
+                    SoftColor = "#e6e3fb"
+                },
+                new Category
+                {
+                    Id = 4,
+                    Title = "Food",
+                    Icon = "food.png",
+                    Color = "#003f5c",
+                    SoftColor = "#d9f2fd"
+
+                },
+            };
+
+
+        }
+        public override void OnNavigatedTo(INavigationParameters parameters)
+        {
+            if (parameters.GetNavigationMode() != NavigationMode.Back)
+            {
+                LoadData();
+                CurrentCategory = Categories.FirstOrDefault();
+            }
+        }
+
+        async void LoadData()
+        {
+            IsProductsLoading = true;
+
+            Products.Clear();
+            await Task.Delay(1000);
+
             Products = new ObservableCollection<ProductSection>
             {
                 new ProductSection
                 {
                     SectionType = SectionType.Carousel,
-                    Items = new System.Collections.Generic.List<Product>
-                    {
-                        new Product
-                        {
-                            Title = "Apples",
-                            Photo = "https://www.konfest.com/wp-content/uploads/2019/07/Konfest-PNG-JPG-Image-Pic-Photo-Free-Download-Royalty-Unlimited-clip-art-sticker-Fruits-Fresh-Eat-Eatable-Vegetables-Food-Apple-Healthy-Greenxial1wuusks863fre7qk.png",
-                            Price = 2.5,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tellus lacus, scelerisque quis suscipit id, ultrices ac dui. Sed vehicula cursus vulputate. Morbi tempor hendrerit lorem et faucibus. Aenean finibus nisi lacus, id faucibus nisl egestas id. Sed venenatis nibh elit, vitae rhoncus nulla congue vitae. Vivamus ut nibh sit amet mauris imperdiet aliquam non eu est. Praesent consequat consectetur ipsum, in pellentesque odio lacinia quis. Proin id nisi sit amet urna posuere viverra et vel diam."
-                        },
-                        new Product
-                        {
-                            Title = "Apricot",
-                            Photo = "https://cdn.shortpixel.ai/client/q_glossy,ret_img,w_210/https://www.konfest.com/wp-content/uploads/2019/07/Konfest-PNG-JPG-Image-Pic-Photo-Free-Download-Royalty-Unlimited-clip-art-sticker-Fruits-Fresh-Eat-Eatable-Vegetables-Food-Apricot-Peach-Red-Orange-Seed-Healthynijzl2n1ptvdtqr4ydmq.png",
-                            Price = 3.5,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tellus lacus, scelerisque quis suscipit id, ultrices ac dui. Sed vehicula cursus vulputate. Morbi tempor hendrerit lorem et faucibus. Aenean finibus nisi lacus, id faucibus nisl egestas id. Sed venenatis nibh elit, vitae rhoncus nulla congue vitae. Vivamus ut nibh sit amet mauris imperdiet aliquam non eu est. Praesent consequat consectetur ipsum, in pellentesque odio lacinia quis. Proin id nisi sit amet urna posuere viverra et vel diam."
-                        },
-                        new Product
-                        {
-                            Title = "Blueberries",
-                            Photo = "https://www.konfest.com/wp-content/uploads/2019/06/Konfest-PNG-JPG-Image-Pic-Photo-Free-Download-Royalty-Unlimited-clip-art-sticker-Fruits-Fresh-Eat-Eatable-Vegetables-Food-Berries-Blue-Berry-Juice-Healthy-16.png",
-                            Price = 5.5,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tellus lacus, scelerisque quis suscipit id, ultrices ac dui. Sed vehicula cursus vulputate. Morbi tempor hendrerit lorem et faucibus. Aenean finibus nisi lacus, id faucibus nisl egestas id. Sed venenatis nibh elit, vitae rhoncus nulla congue vitae. Vivamus ut nibh sit amet mauris imperdiet aliquam non eu est. Praesent consequat consectetur ipsum, in pellentesque odio lacinia quis. Proin id nisi sit amet urna posuere viverra et vel diam."
-                        }
-                    }
+                    Items = new List<Product>(Data.Products.Where(e => e.CategoryId == CurrentCategory.Id && e.IsFeatured))
                 },
                 new ProductSection
                 {
                     SectionType = SectionType.List,
                     Title = "Popular",
-                    Items = new System.Collections.Generic.List<Product>
-                    {
-                        new Product
-                        {
-                            Title = "Lemons",
-                            Photo = "https://cdn.shortpixel.ai/client/q_glossy,ret_img,w_1000/https://www.konfest.com/wp-content/uploads/2019/06/Konfest-PNG-JPG-Image-Pic-Photo-Free-Download-Royalty-Unlimited-clip-art-sticker-Fruits-Fresh-Eat-Eatable-Vegetables-Food-Lemon-Juice-Juicy-Yellow-4.png",
-                            Price = 2.5,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tellus lacus, scelerisque quis suscipit id, ultrices ac dui. Sed vehicula cursus vulputate. Morbi tempor hendrerit lorem et faucibus. Aenean finibus nisi lacus, id faucibus nisl egestas id. Sed venenatis nibh elit, vitae rhoncus nulla congue vitae. Vivamus ut nibh sit amet mauris imperdiet aliquam non eu est. Praesent consequat consectetur ipsum, in pellentesque odio lacinia quis. Proin id nisi sit amet urna posuere viverra et vel diam."
-                        },
-                        new Product
-                        {
-                            Title = "Orange",
-                            Photo = "https://www.konfest.com/wp-content/uploads/2019/06/Konfest-PNG-JPG-Image-Pic-Photo-Free-Download-Royalty-Unlimited-clip-art-sticker-Fruits-Fresh-Eat-Eatable-Vegetables-Food-Orange-Juice-Juicy-Healthy-Kinnow-4.png",
-                            Price = 5.5,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tellus lacus, scelerisque quis suscipit id, ultrices ac dui. Sed vehicula cursus vulputate. Morbi tempor hendrerit lorem et faucibus. Aenean finibus nisi lacus, id faucibus nisl egestas id. Sed venenatis nibh elit, vitae rhoncus nulla congue vitae. Vivamus ut nibh sit amet mauris imperdiet aliquam non eu est. Praesent consequat consectetur ipsum, in pellentesque odio lacinia quis. Proin id nisi sit amet urna posuere viverra et vel diam."
-                        }
-                    }
+                    Items = new List<Product>(Data.Products.Where(e => e.CategoryId == CurrentCategory.Id && !e.IsFeatured))
+
                 }
             };
+            IsProductsLoading = false;
+        }
+        async void GoToDetail(Product product)
+        {
+            SelectedProductId = product.Id;
+            var navParam = new NavigationParameters { { nameof(product), product }, { nameof(CurrentCategory), CurrentCategory } };
+            await NavigationService.NavigateAsync($"{nameof(ProductDetailPage)}", navParam);
         }
     }
 }

@@ -68,6 +68,8 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderers\CustomScrollViewRenderer.cs" />
+    <Compile Include="Renderers\ExtendedEntryRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -123,13 +125,19 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.5.0.495" />
+    <PackageReference Include="Xamarin.Forms" Version="4.5.0.530" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.2" />
     <PackageReference Include="Xamarin.Forms.PancakeView">
       <Version>1.3.7</Version>
     </PackageReference>
     <PackageReference Include="Prism.Unity.Forms">
       <Version>7.2.0.1422</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Plugin.SharedTransitions">
+      <Version>2.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading.Forms">
+      <Version>2.4.11.982</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
@@ -140,7 +148,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\materialdesignicons-webfont.ttf" />
-    <BundleResource Include="Resources\indicator.png" />
+    <BundleResource Include="Resources\plate.png" />
+    <BundleResource Include="Resources\meat.png" />
+    <BundleResource Include="Resources\vegetable.png" />
+    <BundleResource Include="Resources\fruit.png" />
+    <BundleResource Include="Resources\loading.gif" />
+    <BundleResource Include="Resources\food.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Renderers\" />
   </ItemGroup>
 </Project>

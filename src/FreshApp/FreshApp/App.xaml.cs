@@ -1,10 +1,12 @@
 ﻿using System;
 using FreshApp.Views;
+using Plugin.SharedTransitions;
 using Prism;
 using Prism.Ioc;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+[assembly: ExportFont("MaterialIcons.ttf")]
 namespace FreshApp
 {
     [AutoRegisterForNavigation]
@@ -18,12 +20,12 @@ namespace FreshApp
         {
             InitializeComponent();
 
-            await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(ProductsPage)}");
+            await NavigationService.NavigateAsync($"{nameof(SharedTransitionNavigationPage)}/{nameof(ProductsPage)}");
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<NavigationPage>();
+            containerRegistry.RegisterForNavigation<SharedTransitionNavigationPage>();
         }
     }
 }
